@@ -6,6 +6,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import '@fortawesome/fontawesome-free/js/all'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VueParticles from 'vue-particles'
 
 import VueDisqus from 'vue-disqus'
 
@@ -19,6 +20,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+Vue.use(VueParticles)
 
 new Vue({
   router,
