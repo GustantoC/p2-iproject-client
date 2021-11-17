@@ -60,5 +60,28 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.card {
+  min-width: 250px;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: #ffab4c;
+  display: flex;
+  flex-direction: column;
+  transition: 0.2s;
+  margin: 1rem;
+  scroll-snap-align: start;
+  clear: both;
+  position: relative;
+}
+.card:focus-within ~ .card,
+.card:hover ~ .card {
+  transform: translateX(130px);
+  
+}
+
+.card:hover {
+  transform: translateY(-1rem);
+  
+}
 </style>

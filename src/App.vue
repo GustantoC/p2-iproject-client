@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div id="particlesvue">
-      <vue-particles color="#dedede"></vue-particles>
-    </div>
     <Loading v-if="isLoading"></Loading>
     <div id="app">
       <div class="w-100">
@@ -71,18 +68,5 @@ body {
   background-repeat: no-repeat;
   background-size: auto;
   font-family: "Cabin", sans-serif;
-}
-
-#particlesvue {
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  opacity: 0.5;
-  z-index: -1;
 }
 </style>
