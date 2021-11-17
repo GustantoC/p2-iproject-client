@@ -1,16 +1,16 @@
 <template>
   <div>
     <a href="" @click.prevent="goDetail">
-    <b-card
-      style="width: 12rem"
-      :img-src="anime.imageUrl"
-      img-alt="Manga Image"
-      img-top
-    >
-      <b-card-text style="text-align: left">
-        <h5>{{ anime.title }}</h5>
-      </b-card-text>
-    </b-card>
+      <b-card
+        style="width: 12rem"
+        :img-src="anime.imageUrl"
+        img-alt="Manga Image"
+        img-top
+      >
+        <header class="card-header">
+          <h5>{{ anime.title }}</h5>
+        </header>
+      </b-card>
     </a>
   </div>
 </template>
@@ -24,9 +24,9 @@ export default {
       this.$router.push({
         name: "DetailPage",
         params: {
-          type: 'anime',
-          id: this.anime.MalId
-        }
+          type: "anime",
+          id: this.anime.MalId,
+        },
       });
     },
   },

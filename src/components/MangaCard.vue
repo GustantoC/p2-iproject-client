@@ -7,12 +7,9 @@
         img-alt="Manga Image"
         img-top
       >
-        <b-card-text style="text-align: left">
+        <header class="card-header">
           <h5>{{ manga.title }}</h5>
-          <p>
-            Status: <span>{{ manga.status }}</span>
-          </p>
-        </b-card-text>
+        </header>
       </b-card>
     </a>
   </div>
@@ -27,9 +24,9 @@ export default {
       this.$router.push({
         name: "DetailPage",
         params: {
-          type: 'manga',
-          id: this.manga.id
-        }
+          type: "manga",
+          id: this.manga.id,
+        },
       });
     },
   },
