@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>OctaCool</h1>
-    <form class="form-inline">
+    <form class="form">
       <input
         class="form-control mr-sm-2"
         type="search"
@@ -11,7 +11,7 @@
       />
       <button
         class="btn btn-success my-2 my-sm-0"
-        type="button"
+        type="submit"
         @click.prevent="searchHome"
       >
         Search

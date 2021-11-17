@@ -124,12 +124,9 @@ export default new Vuex.Store({
         params: payload
       })
         .then(({ data }) => {
-          console.log(data)
           context.commit("SET_MANGAS", data)
-          context.commit("SET_ISLOADING", false)
         })
         .catch(({ response }) => {
-          context.commit("SET_ISLOADING", false)
           Toast.fire({
             icon: 'error',
             title: 'Error!',
@@ -175,7 +172,6 @@ export default new Vuex.Store({
     },
     getDetail(context, payload) {
       let { type, id } = payload
-      console.log(type, id)
       context.commit("SET_ISLOADING", true)
       axios({
         method: 'GET',

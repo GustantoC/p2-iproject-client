@@ -1,6 +1,8 @@
 <template>
   <div>
-    <vue-particles color="#dedede" id="particles"></vue-particles>
+    <div id="particlesvue">
+      <vue-particles color="#dedede"></vue-particles>
+    </div>
     <Loading v-if="isLoading"></Loading>
     <div id="app">
       <div class="w-100">
@@ -65,12 +67,13 @@ export default {
   color: #42b983;
 }
 body {
-  background-image: linear-gradient(to bottom, #DED9C4, #D0CAB2);
+  background-image: linear-gradient(to bottom, #FFC898, #F9F3DF);
   background-repeat: no-repeat;
   background-size: auto;
   font-family: "Cabin", sans-serif;
 }
-#particles{
+
+#particlesvue {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -79,7 +82,7 @@ body {
   height: 100%;
   top: 0;
   left: 0;
-  opacity: 0.7;
+  opacity: 0.5;
   z-index: -1;
 }
 </style>
