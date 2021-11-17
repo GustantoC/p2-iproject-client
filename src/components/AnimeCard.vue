@@ -1,16 +1,17 @@
 <template>
   <div>
+    <a href="" @click.prevent="goDetail">
     <b-card
-      style="width: 15rem"
+      style="width: 12rem"
       :img-src="anime.imageUrl"
       img-alt="Manga Image"
       img-top
     >
       <b-card-text style="text-align: left">
         <h5>{{ anime.title }}</h5>
-        <p>Score: <span >{{ anime.score }}</span></p>
       </b-card-text>
     </b-card>
+    </a>
   </div>
 </template>
 
@@ -18,8 +19,26 @@
 export default {
   name: "AnimeCard",
   props: ["anime"],
+  methods: {
+    goDetail() {
+      this.$router.push({
+        name: "DetailPage",
+        params: {
+          type: 'anime',
+          id: this.anime.MalId
+        }
+      });
+    },
+  },
 };
 </script>
 
 <style>
+a {
+  text-decoration: none;
+  color: black;
+}
+a.hover {
+  text-decoration: none;
+}
 </style>

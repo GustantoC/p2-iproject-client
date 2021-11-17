@@ -21,9 +21,19 @@ const routes = [
     component: () => import('../views/RegisterPage.vue')
   },
   {
-    path: '/detail/:malid',
+    path: '/mylist',
+    name: 'MyList',
+    component: () => import('../views/MyList.vue')
+  },
+  {
+    path: '/detail/:type/:id',
     name: 'DetailPage',
     component: () => import('../views/DetailPage.vue')
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: () => import('../views/NotFound.vue')
   }
 ]
 

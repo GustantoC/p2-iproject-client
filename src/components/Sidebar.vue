@@ -19,8 +19,16 @@
             <b-nav-item href="" @click="hide"
               ><router-link to="/">Home</router-link></b-nav-item
             >
-            <b-nav-item href="" @click="hide"
+            <b-nav-item href="" @click="hide" v-if="!isLoggedIn"
               ><router-link to="/login">Login</router-link></b-nav-item
+            >
+            <b-nav-item href="" @click="hide" v-if="isLoggedIn"
+              ><router-link to="/mylist"
+                >My List</router-link
+              ></b-nav-item
+            >
+            <b-nav-item href="" @click="hide" v-if="isLoggedIn"
+              ><a href="" @click.prevent="logoutHandler">logout</a></b-nav-item
             >
           </b-nav>
         </nav>
@@ -32,6 +40,16 @@
 <script>
 export default {
   name: "SideBar",
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    },
+  },
+  methods: {
+    logoutHandler() {
+      this.$store.dispatch("logoutHandler");
+    },
+  },
 };
 </script>
 

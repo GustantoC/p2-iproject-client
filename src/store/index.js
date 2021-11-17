@@ -17,8 +17,12 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isLoggedIn: false,
+    isLoading: false,
     mangas: [],
-    animes: []
+    animes: [],
+    myMangas: [],
+    myAnimes: [],
+    detailPage: {}
   },
   mutations: {
     SET_LOGGED_IN: (state, payload) => {
@@ -29,10 +33,23 @@ export default new Vuex.Store({
     },
     SET_ANIMES: (state, payload) => {
       state.animes = payload
+    },
+    SET_ISLOADING: (state, payload) => {
+      state.isLoading = payload
+    },
+    SET_DETAIL_PAGE: (state, payload) => {
+      state.detailPage = payload
+    },
+    SET_MY_MANGAS: (state, payload) => {
+      state.myMangas = payload
+    },
+    SET_MY_ANIMES: (state, payload) => {
+      state.myAnimes = payload
     }
   },
   actions: {
     loginHandler(context, payload) {
+      context.commit("SET_ISLOADING", true)
       axios({
         method: 'POST',
         url: '/login',
@@ -41,6 +58,7 @@ export default new Vuex.Store({
         .then(({ data }) => {
           localStorage.setItem("access_token", data.access_token)
           context.commit("SET_LOGGED_IN", true)
+          context.commit("SET_ISLOADING", false)
           Router.push("/")
           Toast.fire({
             icon: 'success',
@@ -48,6 +66,7 @@ export default new Vuex.Store({
           })
         })
         .catch(({ response }) => {
+          context.commit("SET_ISLOADING", false)
           Toast.fire({
             icon: 'error',
             title: 'Error!',
@@ -64,13 +83,14 @@ export default new Vuex.Store({
         })
       } else {
         delete payload.confirmPassword
-        console.log(payload)
+        context.commit("SET_ISLOADING", true)
         axios({
           method: 'POST',
           url: '/register',
           data: payload
         })
           .then(() => {
+            context.commit("SET_ISLOADING", false)
             Router.push("/login")
             Toast.fire({
               icon: 'success',
@@ -78,6 +98,7 @@ export default new Vuex.Store({
             })
           })
           .catch(({ response }) => {
+            context.commit("SET_ISLOADING", false)
             Toast.fire({
               icon: 'error',
               title: 'Error!',
@@ -86,15 +107,29 @@ export default new Vuex.Store({
           })
       }
     },
-    getTopMangas(context) {
+    logoutHandler(context) {
+      localStorage.clear()
+      context.commit("SET_LOGGED_IN", false)
+      Router.push("/")
+      Toast.fire({
+        icon: 'success',
+        title: 'Logout Successful',
+      })
+    },
+    getTopMangas(context, payload) {
+      payload = payload || { title: '' }
       axios({
         method: 'GET',
-        url: '/top50/manga/manga',
+        url: '/getManga',
+        params: payload
       })
         .then(({ data }) => {
+          console.log(data)
           context.commit("SET_MANGAS", data)
+          context.commit("SET_ISLOADING", false)
         })
         .catch(({ response }) => {
+          context.commit("SET_ISLOADING", false)
           Toast.fire({
             icon: 'error',
             title: 'Error!',
@@ -102,14 +137,81 @@ export default new Vuex.Store({
           })
         })
     },
-
     getTopAnimeAiring(context) {
       axios({
         method: 'GET',
-        url: '/top50/anime/airing',
+        url: '/getAnime/airing',
       })
         .then(({ data }) => {
           context.commit("SET_ANIMES", data)
+          context.commit("SET_ISLOADING", false)
+        })
+        .catch(({ response }) => {
+          context.commit("SET_ISLOADING", false)
+          Toast.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: response.data.message
+          })
+        })
+    },
+    getTopAnimeUpcoming(context) {
+      axios({
+        method: 'GET',
+        url: '/getAnime/upcoming',
+      })
+        .then(({ data }) => {
+          context.commit("SET_ANIMES", data)
+          context.commit("SET_ISLOADING", false)
+        })
+        .catch(({ response }) => {
+          context.commit("SET_ISLOADING", false)
+          Toast.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: response.data.message
+          })
+        })
+    },
+    getDetail(context, payload) {
+      let { type, id } = payload
+      console.log(type, id)
+      context.commit("SET_ISLOADING", true)
+      axios({
+        method: 'GET',
+        url: `/getDetail/${type}/${id}`,
+      })
+        .then(({ data }) => {
+          context.commit("SET_DETAIL_PAGE", data)
+          context.commit("SET_ISLOADING", false)
+        })
+        .catch(({ response }) => {
+          context.commit("SET_ISLOADING", false)
+          Toast.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: response.data.message
+          })
+        })
+    },
+    startLoading(context) {
+      context.commit("SET_ISLOADING", true)
+    },
+    stopLoading(context) {
+      context.commit("SET_ISLOADING", false)
+    },
+    addToMyList(context, payload) {
+      let { type, id } = payload
+      axios({
+        method: 'POST',
+        url: `/addToMyList/${type}/${id}`,
+        headers: { access_token: localStorage.getItem("access_token") }
+      })
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: 'Successfully added to your list',
+          })
         })
         .catch(({ response }) => {
           Toast.fire({
@@ -119,16 +221,38 @@ export default new Vuex.Store({
           })
         })
     },
-
-    getTopAnimeUpcoming(context) {
+    getMyList(context) {
       axios({
         method: 'GET',
-        url: '/top50/anime/upcoming',
+        url: `/myList`,
+        headers: { access_token: localStorage.getItem("access_token") }
       })
         .then(({ data }) => {
-          context.commit("SET_MANGAS", data)
+          context.commit("SET_MY_MANGAS", data.myMangas)
+          context.commit("SET_MY_ANIMES", data.myAnimes)
+          context.commit("SET_ISLOADING", false)
         })
         .catch(({ response }) => {
+          context.commit("SET_ISLOADING", false)
+          Toast.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: response.data.message
+          })
+        })
+    },
+    searchAnime(context,payload){
+      axios({
+        method: 'GET',
+        url: '/getAnime/airing',
+        params: payload
+      })
+        .then(({ data }) => {
+          context.commit("SET_ANIMES", data)
+          context.commit("SET_ISLOADING", false)
+        })
+        .catch(({ response }) => {
+          context.commit("SET_ISLOADING", false)
           Toast.fire({
             icon: 'error',
             title: 'Error!',
